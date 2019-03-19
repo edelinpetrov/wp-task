@@ -25,7 +25,7 @@ class TaskEndpoints {
             register_rest_field( 'task_product',
                 $option_name,
                 array(
-                    'get_callback'      => function ($params) use ($option_name) {
+                    'get_callback'      => function ( $params)  use ( $option_name ) {
                         return \get_post_meta( $params['id'], $option_name, true );
                     },
                 )
@@ -71,11 +71,11 @@ class TaskEndpoints {
                     continue;
                 }
             }
-        }
 
-        return new \WP_REST_Response( array(
-            'success'   => true,
-        ), 200 );
+            return new \WP_REST_Response( array(
+                'success'   => true,
+            ), 200 );
+        }
     }
 
     /**

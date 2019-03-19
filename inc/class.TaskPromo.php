@@ -63,7 +63,6 @@ class TaskPromo {
     /**
      * Register sub menu page
      *
-     * @see register_menu_pages
      */
     public function add_submenu_admin_page() {
         add_submenu_page(
@@ -72,7 +71,7 @@ class TaskPromo {
             __( 'Mass Promo', 'wp-task-admin' ),
             'manage_options',
             'task-mass-promo-page',
-            array( $this, 'display_store_callback' ),
+            array( $this, 'display_promo_callback' )
         );
     }
 
@@ -81,12 +80,13 @@ class TaskPromo {
      *
      * @see register_menu_pages()
      */
-    public function display_store_callback() {
+    public function display_promo_callback() {
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_die(__('You do not have sufficient permissions to access this page.', 'wp-task-admin'));
         }
         ?>
 
+        <!-- Wrapper for react app -->
         <div id="promo_root"></div>
 
         <?php

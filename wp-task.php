@@ -36,10 +36,6 @@ function i18n() {
 add_action( 'plugins_loaded', __NAMESPACE__ . '\i18n' );
 
 /**
- * Include plugin functions
- */
-
-/**
  * Include plugin classes
  */
 require_once WP_TASK_PLUGIN_PATH . 'inc/class.ContentTypes.php';
