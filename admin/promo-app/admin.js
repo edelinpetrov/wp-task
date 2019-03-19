@@ -5,10 +5,10 @@ if (! window._babelPolyfill) {
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Admin from './containers/Admin.jsx';
+import Promo from './containers/Promo.jsx';
 
 document.addEventListener('DOMContentLoaded', function() {
     ReactDOM.render(
-        <Admin wpObject={window.task_object} />, document.getElementById('promo_root')
+        <Promo wpObject={window.task_object} />, document.getElementById('promo_root')
     );
 });

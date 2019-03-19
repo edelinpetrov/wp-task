@@ -9,7 +9,6 @@ class TaskEndpoints {
 
     /**
      * Initialize
-     *
      */
     public function __construct() {
 
@@ -18,37 +17,65 @@ class TaskEndpoints {
     }
 
     /**
-     * Register the routes for the objects of the controller.
+     * Register the routes
      */
     public function register_routes() {
 
-        register_rest_field( 'task_product',
-            'product_metadata',
-            array(
-                'get_callback'      => array( $this, 'rest_get_field' ),
-                'update_callback'   => array( $this, 'rest_update_field' ),
-            )
-        );
-    }
-
-    public function rest_get_field( $object ) {
-        $post_id = $object['id'];
-
-        return get_post_meta( $post_id );
-    }
-
-    public function rest_update_field( $value, $post, $field_name ) {
-        var_dump( $value, $post, $field_name );
-        exit;
-        if ( ! $value || ! is_string ($value ) ) {
-            return new WP_Error(
-                'rest_product_meta_failed',
-                __( 'Failed to update product meta.' ),
-                array( 'status' => 500 )
+        foreach ( TaskStore::get_instance()->options() as $option_name ) {
+            register_rest_field( 'task_product',
+                $option_name,
+                array(
+                    'get_callback'      => function ($params) use ($option_name) {
+                        return \get_post_meta( $params['id'], $option_name, true );
+                    },
+                )
             );
         }
 
-        return update_post_meta( $post->ID, $field_name, strip_tags( $value ) );
+        register_rest_route( '/wp/v2', '/promo/', array(
+            array(
+                'methods'               => \WP_REST_Server::CREATABLE,
+                'callback'              => array( $this, 'update_callback' ),
+                'permission_callback'   => array( $this, 'permissions_check' ),
+                'args'                  => array(),
+            ),
+        ) );
+        register_rest_route( '/wp/v2', '/promo/', array(
+            array(
+                'methods'               => \WP_REST_Server::EDITABLE,
+                'callback'              => array( $this, 'update_callback' ),
+                'permission_callback'   => array( $this, 'permissions_check' ),
+                'args'                  => array(),
+            ),
+        ) );
+    }
+
+    /**
+     * Create OR Update
+     *
+     * @param WP_REST_Request $request Full data about the request.
+     * @return \WP_REST_Response
+     */
+    public function update_callback( $request ) {
+        $promo_product = $request->get_param( 'promo_product' );
+
+        if ( is_array( $promo_product ) && ! empty( $promo_product ) && isset( $promo_product['id'] ) ) {
+            foreach ( $promo_product as $key => $value ) {
+                if ( strpos( $key, 'promo' ) !== false ) {
+                    update_post_meta(
+                        intval( $promo_product['id'] ),
+                        'product_' . $key,
+                        $value
+                    );
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        return new \WP_REST_Response( array(
+            'success'   => true,
+        ), 200 );
     }
 
     /**

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import fetchWP from '../utils/fetchWP';
 
-export default class Admin extends Component {
+export default class Promo extends Component {
     constructor(props){
         super(props);
 
@@ -32,18 +31,18 @@ export default class Admin extends Component {
     mapProduct(product){
         return {
             id: product.id,
-            price: product.product_metadata.product_price,
-            quantity: product.product_metadata.product_quantity,
-            stock: product.product_metadata.product_stock,
-            promo_start: product.product_metadata.product_promo_start,
-            promo_end: product.product_metadata.product_promo_end,
-            promo_price: product.product_metadata.product_promo_price,
+            price: product.product_price,
+            quantity: product.product_quantity,
+            stock: product.product_stock,
+            promo_start: product.product_promo_start,
+            promo_end: product.product_promo_end,
+            promo_price: product.product_promo_price,
             title: product.title.rendered
         }
     }
 
-    updateSetting = () => {
-        this.fetchWP.put( 'task_product', { promo_products: this.state.products } )
+    updateSetting = (product) => {
+        this.fetchWP.post( 'promo', { promo_product: product } )
             .then(
                 (json) => this.processOkResponse(json, 'saved'),
                 (err) => console.log('error', err)
@@ -60,18 +59,20 @@ export default class Admin extends Component {
 
     updateInput = (id, event) => {
         let products = this.state.products;
+        let name = event.target.name;
+        let value = event.target.value;
 
         for (let i=0; i <= products.length; i++) {
             if (products[i].id === id) {
-                products[i][event.target.name] = event.target.value;
+                products[i][name] = value;
                 this.setState({
                     products: products
                 });
+
+                this.updateSetting(products[i]);
                 break;
             }
         }
-
-        this.updateSetting();
     }
 
     render() {
@@ -82,9 +83,9 @@ export default class Admin extends Component {
                     <td>{product.price}</td>
                     <td>{product.quantity}</td>
                     <td>{product.stock}</td>
-                    <td><input type="text" name='promo_start' onBlur={this.updateInput.bind(this, product.id)} defaultValue={product.promo_start}/></td>
-                    <td><input type="text" name='promo_end' onBlur={this.updateInput.bind(this, product.id)} defaultValue={product.promo_end}/></td>
-                    <td><input type="text" name='promo_price' onBlur={this.updateInput.bind(this, product.id)} defaultValue={product.promo_price}/></td>
+                    <td><input type="datetime-local" name='promo_start' onBlur={this.updateInput.bind(this, product.id)} defaultValue={product.promo_start}/></td>
+                    <td><input type="datetime-local" name='promo_end' onBlur={this.updateInput.bind(this, product.id)} defaultValue={product.promo_end}/></td>
+                    <td><input type="number" name='promo_price' onBlur={this.updateInput.bind(this, product.id)} defaultValue={product.promo_price}/></td>
                 </tr>
             );
         });
@@ -113,6 +114,7 @@ export default class Admin extends Component {
     }
 }
 
-Admin.propTypes = {
+// type check
+Promo.propTypes = {
     wpObject: PropTypes.object
 };

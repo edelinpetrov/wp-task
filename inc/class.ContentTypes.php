@@ -72,7 +72,7 @@ class ContentTypes {
             ),
             'capability_type' => 'post',
             'menu_icon' => 'dashicons-cart',
-            'supports' => array( 'title', 'editor', 'excerpt', 'revisions', 'thumbnail' ),
+            'supports' => array( 'title', 'excerpt', 'revisions', 'thumbnail' ),
         );
 
         $post_types_to_register['task_product'] = array(
