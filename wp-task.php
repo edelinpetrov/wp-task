@@ -42,7 +42,8 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\i18n' );
 /**
  * Include plugin classes
  */
-require_once WP_TASK_PLUGIN_PATH . 'inc/class.Content_Types.php';
-require_once WP_TASK_PLUGIN_PATH . 'inc/class.Content_Meta.php';
-require_once WP_TASK_PLUGIN_PATH . 'inc/class.Task_Store_Page.php';
-
+require_once WP_TASK_PLUGIN_PATH . 'inc/class.ContentTypes.php';
+require_once WP_TASK_PLUGIN_PATH . 'inc/class.ContentMeta.php';
+require_once WP_TASK_PLUGIN_PATH . 'inc/class.TaskStore.php';
+require_once WP_TASK_PLUGIN_PATH . 'inc/class.TaskPromo.php';
+require_once WP_TASK_PLUGIN_PATH . 'inc/class.TaskEndpoints.php';

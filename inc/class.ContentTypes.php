@@ -10,7 +10,7 @@ if ( !defined( 'ABSPATH' ) )
  *
  * Register post types and taxonomies.
  */
-class Content_Types {
+class ContentTypes {
 
     private static $instance;
     public $registered_post_types = array();
@@ -66,6 +66,7 @@ class Content_Types {
         $args = array(
             'labels' => $labels,
             'public' => true,
+            'show_in_rest' => true,
             'rewrite' => array(
                 'slug' => 'products',
             ),
@@ -153,4 +154,4 @@ register_deactivation_hook( WP_TASK_PLUGIN_FILE, [ __NAMESPACE__ . '\Content_Typ
 /**
  * Instantiate.
  */
-Content_Types::get_instance();
+ContentTypes::get_instance();

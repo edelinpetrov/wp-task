@@ -10,7 +10,7 @@ if ( !defined( 'ABSPATH' ) )
  *
  * Register custom meta fields
  */
-class Content_Meta {
+class ContentMeta {
 
     /**
      * Constructor.
@@ -49,10 +49,14 @@ class Content_Meta {
      * @param int $post_id Post ID
      */
     function save_product_metafields( $post_id ) {
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return;
+        }
+
         if ( $parent_id = wp_is_post_revision( $post_id ) ) {
             $post_id = $parent_id;
         }
+
         $fields = array(
             'product_price',
             'product_quantity',
@@ -68,10 +72,9 @@ class Content_Meta {
             }
         }
     }
-
 }
 
 /**
  * Instantiate.
  */
-new Content_Meta();
+new ContentMeta();
